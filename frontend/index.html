@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NekDek Auth</title>
+  <script>
+    // Redirect to dashboard if logged in, else to login
+    const token = localStorage.getItem('nd_token');
+    window.location.href = token ? 'dashboard.html' : 'login.html';
+  </script>
+</head>
+<body></body>
+</html>

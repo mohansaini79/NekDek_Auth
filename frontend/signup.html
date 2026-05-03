@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account – NekDek Auth</title>
+  <meta name="description" content="Create your NekDek account with email verification and secure authentication.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="auth-bg"></div>
+  <div class="auth-bg-grid"></div>
+
+  <div class="page-wrap">
+    <div class="card">
+
+      <!-- Brand -->
+      <div class="brand">
+        <div class="brand-logo"><i class="fa-solid fa-shield-halved"></i></div>
+        <span class="brand-name">NekDek Auth</span>
+      </div>
+
+      <h1 class="card-title">Create your account</h1>
+      <p class="card-sub">Start with a free account. No credit card required.</p>
+
+      <!-- Alert -->
+      <div id="alert" class="alert" role="alert"></div>
+
+      <form id="form" novalidate>
+        <!-- Name -->
+        <div class="field">
+          <div class="field-label"><span>Full Name</span></div>
+          <div class="input-group">
+            <i class="icon-left fa-regular fa-user"></i>
+            <input type="text" id="name" placeholder="John Doe" autocomplete="name" required>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="field">
+          <div class="field-label"><span>Email Address</span></div>
+          <div class="input-group">
+            <i class="icon-left fa-regular fa-envelope"></i>
+            <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <div class="field-label"><span>Password</span></div>
+          <div class="input-group">
+            <i class="icon-left fa-solid fa-lock"></i>
+            <input type="password" id="password" placeholder="Create a strong password" autocomplete="new-password" required>
+            <button type="button" class="btn-eye" id="pw-eye" aria-label="Toggle password visibility">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <!-- Strength indicator -->
+          <div class="strength-wrap" id="strength-wrap">
+            <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+            <div class="strength-hints" id="strength-hints">
+              <div class="hint-item" id="h-len"><i class="fa-solid fa-circle-dot"></i>8+ characters</div>
+              <div class="hint-item" id="h-upper"><i class="fa-solid fa-circle-dot"></i>Uppercase letter</div>
+              <div class="hint-item" id="h-lower"><i class="fa-solid fa-circle-dot"></i>Lowercase letter</div>
+              <div class="hint-item" id="h-number"><i class="fa-solid fa-circle-dot"></i>Number (0–9)</div>
+              <div class="hint-item" id="h-special"><i class="fa-solid fa-circle-dot"></i>Special char (@$!%*?&amp;)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="field">
+          <div class="field-label"><span>Confirm Password</span></div>
+          <div class="input-group">
+            <i class="icon-left fa-solid fa-lock"></i>
+            <input type="password" id="confirm" placeholder="Re-enter your password" autocomplete="new-password" required>
+            <button type="button" class="btn-eye" id="cf-eye" aria-label="Toggle confirm password visibility">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-btn" style="margin-top:4px;">
+          <span class="btn-label">Create Account</span>
+          <div class="spin"></div>
+        </button>
+      </form>
+
+      <hr class="divider">
+      <p class="help-text">Already have an account? <a href="login.html">Sign in</a></p>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/signup.js"></script>
+</body>
+</html>

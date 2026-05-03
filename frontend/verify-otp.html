@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Email – NekDek Auth</title>
+  <meta name="description" content="Enter the one-time code sent to your email to verify your account.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="auth-bg"></div>
+  <div class="auth-bg-grid"></div>
+
+  <div class="page-wrap">
+    <div class="card">
+
+      <div class="brand">
+        <div class="brand-logo"><i class="fa-solid fa-shield-halved"></i></div>
+        <span class="brand-name">NekDek Auth</span>
+      </div>
+
+      <!-- Icon header -->
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="width:56px;height:56px;border-radius:16px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;">
+          <i class="fa-regular fa-envelope-open" style="font-size:22px;color:var(--primary-h);"></i>
+        </div>
+        <h1 class="card-title" style="text-align:center;">Check your email</h1>
+        <p class="card-sub" style="text-align:center;">
+          We sent a 6-digit verification code to<br>
+          <strong id="email-display" style="color:var(--text);"></strong>
+        </p>
+      </div>
+
+      <div id="alert" class="alert" role="alert"></div>
+
+      <form id="form" novalidate>
+        <div class="otp-row">
+          <input type="text" id="d0" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code" aria-label="Digit 1">
+          <input type="text" id="d1" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 2">
+          <input type="text" id="d2" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 3">
+          <input type="text" id="d3" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 4">
+          <input type="text" id="d4" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 5">
+          <input type="text" id="d5" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Digit 6">
+        </div>
+
+        <div class="timer-row" id="timer-row">
+          <i class="fa-regular fa-clock"></i>
+          Code expires in <strong id="countdown">05:00</strong>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-btn" style="margin-top:16px;">
+          <span class="btn-label">Verify Email</span>
+          <div class="spin"></div>
+        </button>
+      </form>
+
+      <div style="text-align:center;margin-top:16px;">
+        <button id="resend-btn" class="btn btn-outline" disabled>
+          <i class="fa-solid fa-rotate-right" style="font-size:12px;"></i>
+          <span>Resend Code</span>
+        </button>
+      </div>
+
+      <hr class="divider">
+      <p class="help-text"><a href="signup.html"><i class="fa-solid fa-arrow-left" style="font-size:11px;margin-right:4px;"></i>Back to sign up</a></p>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/verify-otp.js"></script>
+</body>
+</html>
