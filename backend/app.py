@@ -19,15 +19,9 @@ def create_app(config_class=Config) -> Flask:
     app.config.from_object(config_class)
 
     # ── CORS ──────────────────────────────────────────────────────────────────
-  CORS(
-    app,
-    supports_credentials=True,
-    resources={
-        r"/api/*": {
-            "origins": [app.config["FRONTEND_URL"]]
-        }
+  CORS(app,supports_credentials=True,resources={r"/api/*": {"origins": [app.config["FRONTEND_URL"]]
     }
-)
+    })
 
     # ── MongoDB ───────────────────────────────────────────────────────────────
     client = MongoClient(app.config["MONGO_URI"], connect=False)  # lazy connect
