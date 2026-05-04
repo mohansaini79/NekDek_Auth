@@ -5,7 +5,7 @@
 // ── API Base URL ──────────────────────────────────────────────────────────────
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:5000'
-  : 'https://nekdek-auth.onrender.com';  // ← replace after deployment
+  : 'https://nekdek-auth.onrender.com/api';  // ← replace after deployment
 
 // ── Token / User helpers ──────────────────────────────────────────────────────
 const Auth = {
