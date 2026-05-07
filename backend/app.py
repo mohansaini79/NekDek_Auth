@@ -18,13 +18,22 @@ def create_app(config_class=Config) -> Flask:
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-# ── CORS ──────────────────────────────────────────────────────────────────
+    # ── CORS ────────────────────────────────────────────────────────────────
+    _allowed_origins = [
+        app.config["FRONTEND_URL"],          # production Vercel URL from env
+        "http://localhost:5500",              # Live Server (VS Code)
+        "http://127.0.0.1:5500",
+        "http://localhost:3000",              # any local dev server
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",              # Vite
+        "http://127.0.0.1:5173",
+    ]
     CORS(
         app,
         supports_credentials=True,
         resources={
             r"/api/*": {
-                "origins": [app.config["FRONTEND_URL"]]
+                "origins": _allowed_origins
             }
         }
     )

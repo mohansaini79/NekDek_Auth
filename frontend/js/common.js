@@ -3,9 +3,15 @@
  */
 
 // ── API Base URL ──────────────────────────────────────────────────────────────
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5000'
-  : 'https://nekdek-auth.onrender.com';  // ← replace after deployment
+// For production: replace with your actual Render backend URL.
+// Find it at: https://dashboard.render.com → your service → top URL.
+const _PRODUCTION_BACKEND = 'https://nekdek-auth.onrender.com'; // ← update if URL differs
+
+const _h = window.location.hostname;
+const API_BASE =
+  (_h === 'localhost' || _h === '127.0.0.1' || _h === '')  // '' = file:// protocol
+    ? 'http://localhost:5000'
+    : _PRODUCTION_BACKEND;
 
 // ── Token / User helpers ──────────────────────────────────────────────────────
 const Auth = {

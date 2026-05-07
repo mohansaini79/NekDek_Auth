@@ -7,8 +7,14 @@ import os
 from datetime import timedelta
 from dotenv import load_dotenv
 
-# Load .env file from backend root
-load_dotenv()
+# ── Load env file from backend root ──────────────────────────────────────────
+# Supports both "NekDek_Auth.env" (project convention) and standard ".env"
+_base_dir = os.path.dirname(os.path.abspath(__file__))          # config/
+_backend_dir = os.path.dirname(_base_dir)                        # backend/
+_env_file = os.path.join(_backend_dir, "NekDek_Auth.env")
+if not os.path.exists(_env_file):
+    _env_file = os.path.join(_backend_dir, ".env")               # fallback
+load_dotenv(dotenv_path=_env_file, override=True)
 
 
 class Config:
