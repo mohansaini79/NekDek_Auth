@@ -3,15 +3,14 @@ Email Utility
 Sends OTP emails via Flask-Mail (SMTP).
 """
 
-import random
-import string
+import secrets
 from flask_mail import Message
 from flask import current_app
 
 
 def generate_otp(length: int = 6) -> str:
-    """Generate a cryptographically random numeric OTP."""
-    return "".join(random.choices(string.digits, k=length))
+    """Generate a cryptographically secure random numeric OTP."""
+    return "".join(secrets.choice("0123456789") for _ in range(length))
 
 
 def send_otp_email(mail, to_email: str, otp: str, purpose: str = "verification") -> bool:

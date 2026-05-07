@@ -3,7 +3,14 @@
  */
 (function () {
   const email = TempEmail.get();
-  if (!email) { window.location.href = 'signup.html'; return; }
+  if (!email) {
+    // Email missing: show message then redirect to signup
+    document.body.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c8c8d4;background:#0f0f1a;flex-direction:column;gap:16px;">' +
+      '<p style="font-size:1.1rem;">⚠️ Session expired or page was refreshed.<br>Redirecting you back to sign up…</p></div>';
+    setTimeout(() => { window.location.href = 'signup.html'; }, 2500);
+    return;
+  }
 
   document.getElementById('email-display').textContent = email;
 

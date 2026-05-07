@@ -110,8 +110,11 @@ function initPasswordToggle(inputId, btnId) {
 }
 
 // ── Session helpers ───────────────────────────────────────────────────────────
+// NOTE: Using localStorage (not sessionStorage) so the pending-verification
+// email survives Vercel static-page navigations, tab restores and reloads.
+// It is cleared explicitly after OTP is verified or on signup page visit.
 const TempEmail = {
-  set(e)  { sessionStorage.setItem('nd_email', e); },
-  get()   { return sessionStorage.getItem('nd_email') || ''; },
-  clear() { sessionStorage.removeItem('nd_email'); },
+  set(e)  { localStorage.setItem('nd_pending_email', e); },
+  get()   { return localStorage.getItem('nd_pending_email') || ''; },
+  clear() { localStorage.removeItem('nd_pending_email'); },
 };
