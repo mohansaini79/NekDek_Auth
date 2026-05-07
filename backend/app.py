@@ -4,9 +4,8 @@ Entry point for the NekDek Auth backend.
 """
 
 import re
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, make_response
 from flask_mail import Mail
-from flask_cors import CORS
 from pymongo import MongoClient
 
 from config.config import Config
@@ -15,46 +14,70 @@ from routes.password_routes import password_bp
 from routes.user_routes import user_bp
 
 
+# ── Allowed origins (module-level) ────────────────────────────────────────────
+_LOCAL_ORIGINS = {
+    "http://localhost:5500", "http://127.0.0.1:5500",
+    "http://localhost:3000", "http://127.0.0.1:3000",
+    "http://localhost:5173", "http://127.0.0.1:5173",
+    "http://localhost:5000", "http://127.0.0.1:5000",
+}
+# Matches production + any Vercel preview/branch URL:
+#   https://nek-dek-auth.vercel.app
+#   https://nek-dek-auth-git-main-xyz.vercel.app  etc.
+_VERCEL_PATTERN = re.compile(r"^https://nek-dek-auth[\w-]*\.vercel\.app$")
+
+
+def _is_origin_allowed(origin: str, production_url: str) -> bool:
+    if not origin:
+        return False
+    if origin == production_url:
+        return True
+    if origin in _LOCAL_ORIGINS:
+        return True
+    if _VERCEL_PATTERN.match(origin):
+        return True
+    return False
+
+
 def create_app(config_class=Config) -> Flask:
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # ── CORS ────────────────────────────────────────────────────────────────
-    # Allow: the exact production Vercel URL, ALL Vercel preview URLs
-    # (nek-dek-auth-*.vercel.app), and common local dev origins.
     _production_url = app.config["FRONTEND_URL"].rstrip("/")
-    _local_origins = [
-        "http://localhost:5500",
-        "http://127.0.0.1:5500",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5000",
-        "http://127.0.0.1:5000",
-    ]
 
-    def _cors_origin_allowed(origin):
-        if not origin:
-            return False
-        if origin == _production_url:
-            return True
-        if origin in _local_origins:
-            return True
-        # Allow any Vercel preview / branch deployment URL
-        if re.match(r"https://nek-dek-auth[\w-]*\.vercel\.app$", origin):
-            return True
-        return False
+    # ── CORS – manual handlers ────────────────────────────────────────────────
+    # We use a manual approach instead of flask-cors because the callable-origin
+    # API can silently fail to set headers on OPTIONS preflight requests when
+    # running under gunicorn on Render.  This is explicit and always reliable.
 
-    CORS(
-        app,
-        supports_credentials=True,
-        resources={
-            r"/api/*": {
-                "origins": _cors_origin_allowed
-            }
-        }
-    )
+    @app.before_request
+    def handle_preflight():
+        """Respond immediately to OPTIONS preflight so CORS headers are set."""
+        if request.method == "OPTIONS":
+            origin = request.headers.get("Origin", "")
+            resp = make_response("", 200)
+            if _is_origin_allowed(origin, _production_url):
+                resp.headers["Access-Control-Allow-Origin"] = origin
+                resp.headers["Access-Control-Allow-Credentials"] = "true"
+                resp.headers["Access-Control-Allow-Methods"] = (
+                    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+                )
+                resp.headers["Access-Control-Allow-Headers"] = (
+                    "Content-Type, Authorization, X-Requested-With"
+                )
+                resp.headers["Access-Control-Max-Age"] = "600"
+                resp.headers["Vary"] = "Origin"
+            return resp
+
+    @app.after_request
+    def apply_cors(response):
+        """Add CORS headers to every non-OPTIONS response."""
+        origin = request.headers.get("Origin", "")
+        if _is_origin_allowed(origin, _production_url):
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Vary"] = "Origin"
+        return response
 
     # ── MongoDB ───────────────────────────────────────────────────────────────
     client = MongoClient(app.config["MONGO_URI"], connect=False)  # lazy connect
